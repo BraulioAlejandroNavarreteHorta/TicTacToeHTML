@@ -1,0 +1,109 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tic Tac Toe</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <style>
+            html, body, .container {
+                height: 100%;
+            }
+
+            .container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #tablero {
+                width: 90%;
+                max-width: 800px;
+            }
+
+            th, td {
+                padding: 0;
+                width: 100px; /* Ancho de las celdas */
+                height: 100px; /* Alto de las celdas */
+                font-size: 40px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div id="tablero">
+                <table class="table table-bordered text-center" id="tablero">
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                llenadoPc();
+
+                $('#tablero td').click(function() {
+                    if ($(this).text().trim() === "") {
+                        $(this).text("X");
+                        if (hayGanador("X")) {
+                            setTimeout(function() {alert("¡Felicidades! ¡Has ganado!");location.reload();}, 500);
+                        } else {
+                            llenadoPc();
+                            if (hayGanador("O")) {
+                                setTimeout(function() {alert("¡La PC ha ganado! Mejor suerte la próxima vez.");location.reload();}, 500);
+                            }
+                        }
+                    }
+                });
+                function llenadoPc(){
+                    if ($(this).text().trim() === "") {
+                        var celdasVacias = $('#tablero td:empty');
+                        var indiceAleatorio = Math.floor(Math.random() * celdasVacias.length);
+                        var celdaSeleccionada = $(celdasVacias[indiceAleatorio]);
+                        celdaSeleccionada.text("O");
+                    }
+                }
+
+                function hayGanador(jugador) {
+                    var combinacionesGanadoras = [
+                        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                        [0, 4, 8], [2, 4, 6]
+                    ];
+
+                    for (var i = 0; i < combinacionesGanadoras.length; i++) {
+                        var combinacion = combinacionesGanadoras[i];
+                        var a = combinacion[0];
+                        var b = combinacion[1];
+                        var c = combinacion[2];
+
+                        if ($('#tablero td').eq(a).text() === jugador && $('#tablero td').eq(b).text() === jugador && $('#tablero td').eq(c).text() === jugador) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+            });
+        </script>
+    </body>
+    </html>
